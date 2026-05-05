@@ -11,7 +11,7 @@ The analysis is structured into three main parts: estimation of beta coefficient
 
 - Monthly data from January 2019 to December 2025 are used, giving 83 monthly observations of logarithmic returns.  
 - The investment universe consists of 100 stocks from the Euronext 100 index (Amsterdam, Brussels, Dublin, Lisbon, Milan, Oslo, Paris).  
-- The market portfolio is proxied by the \(^\text{N100}\) index.  
+- The market portfolio is proxied by the $$\(^\text{N100}\)$$ index.  
 - The risk‑free rate is the ECB deposit facility rate (ECBDFR), converted to monthly frequency by dividing by 12.  
 - Missing observations due to IPOs, mergers, and restructurings are handled by aligning time series with the market index; pre‑listing periods are excluded from regressions as NA.
 
@@ -19,18 +19,18 @@ The analysis is structured into three main parts: estimation of beta coefficient
 
 ### 1. Individual stock CAPM regressions
 
-For each stock \(j\), the CAPM characteristic line is estimated using OLS on monthly excess returns:
+For each stock $$\(j\)$$, the CAPM characteristic line is estimated using OLS on monthly excess returns:
 
 $$\[r_j - r_f = \alpha_j + \beta_j (r_m - r_f) + \varepsilon_j\]$$
 
 - At least 30 valid observations are required for each stock, which all 100 stocks satisfy.  
 - Estimated betas range from approximately 0.15 (defensive, e.g. TEL.OL – Telenor) to 2.06 (aggressive, e.g. A5G.IR – AIB Group).  
-- 41 stocks are classified as defensive (\(\beta < 1\)) and 59 as aggressive (\(\beta \ge 1\)).
+- 41 stocks are classified as defensive $$(\(\beta < 1\))$$ and 59 as aggressive $$(\(\beta \ge 1\))$$.
 
 Significance of abnormal returns is tested via:
 
-- \(H_0: \alpha_j = 0\) vs. \(H_1: \alpha_j \neq 0\) at the 5% level.  
-- \(H_0\) is not rejected for 94 stocks (94%), while it is rejected for 6 stocks (all with positive alpha), a rate consistent with the expected number of false rejections at the 5% level.
+- $$\(H_0: \alpha_j = 0\) vs. \(H_1: \alpha_j \neq 0\)$$ at the 5% level.  
+- $$\(H_0\)$ is not rejected for 94 stocks (94%), while it is rejected for 6 stocks (all with positive alpha), a rate consistent with the expected number of false rejections at the 5% level.
 
 ### 2. Portfolio construction and SML
 
@@ -39,31 +39,27 @@ Significance of abnormal returns is tested via:
 
 A cross‑sectional regression of portfolio average excess returns on portfolio betas is used to estimate the Security Market Line:
 
-\[
-r_p - r_f = \gamma_0 + \gamma_1 \beta_p + \varepsilon_p
-\]
+$$\[r_p - r_f = \gamma_0 + \gamma_1 \beta_p + \varepsilon_p\]$$
 
 - Newey–West robust standard errors are applied due to the small sample of 10 portfolios.  
-- The intercept \(\gamma_0\) is positive and statistically significant (p ≈ 0.035), which is inconsistent with the CAPM restriction \(\gamma_0 = 0\).  
-- The slope \(\gamma_1\) is not significant at the 5% level (p ≈ 0.085), but is close to the observed market risk premium, so \(\gamma_1 = r_m - r_f\) cannot be rejected.  
-- The regression explains about 43% of the cross‑sectional variation in portfolio risk premia (\(R^2 \approx 0.43\)).
+- The intercept $$\(\gamma_0\)$$ is positive and statistically significant (p ≈ 0.035), which is inconsistent with the CAPM restriction $$\(\gamma_0 = 0\)$$.  
+- The slope $$\(\gamma_1\)$$ is not significant at the 5% level (p ≈ 0.085), but is close to the observed market risk premium, so $$\(\gamma_1 = r_m - r_f\)$$ cannot be rejected.  
+- The regression explains about 43% of the cross‑sectional variation in portfolio risk premia $$(\(R^2 \approx 0.43\))$$.
 
 These findings are in line with empirical literature: a positive, significant intercept and a slope lower than the market premium suggest that defensive stocks earn higher returns and aggressive stocks lower returns than predicted by CAPM.
 
 ### 3. Fama–MacBeth (1973) tests
 
-The Fama–MacBeth procedure is implemented using cross‑sectional regressions across the 10 portfolios for each month \(t\):
+The Fama–MacBeth procedure is implemented using cross‑sectional regressions across the 10 portfolios for each month $$\(t\)$$:
 
-\[
-R_{pt} = \gamma_{0t} + \gamma_{1t} \beta_p + \gamma_{2t} \beta_p^2 + \gamma_{3t} \sigma^2(\varepsilon_p) + \eta_{pt}
-\]
+$$\[R_{pt} = \gamma_{0t} + \gamma_{1t} \beta_p + \gamma_{2t} \beta_p^2 + \gamma_{3t} \sigma^2(\varepsilon_p) + \eta_{pt}\]$$
 
 - Time‑series averages of the monthly coefficients are computed, with standard errors robust to serial correlation.  
 - Estimates are available for all 83 months.  
-- The null of linearity in beta (\(\delta_3 = 0\) for the \(\beta^2\) term) is not rejected (p ≈ 0.703), supporting a linear beta–return relation.  
-- The null that idiosyncratic risk is not priced (\(\delta_4 = 0\) for \(\sigma^2(\varepsilon)\)) is also not rejected (p ≈ 0.287).  
+- The null of linearity in beta $$(\(\delta_3 = 0\)$$ for the $$\(\beta^2\)$$ term) is not rejected (p ≈ 0.703), supporting a linear beta–return relation.  
+- The null that idiosyncratic risk is not priced $$(\(\delta_4 = 0\) for \(\sigma^2(\varepsilon)\))$$ is also not rejected (p ≈ 0.287).  
 
-Multicollinearity between \(\beta\) and \(\beta^2\) is high (VIF ≈ 22–26), but this is expected and does not materially affect the key coefficient on idiosyncratic variance (VIF ≈ 2.1).
+Multicollinearity between $$\(\beta\)$$ and $$\(\beta^2\)$$ is high (VIF ≈ 22–26), but this is expected and does not materially affect the key coefficient on idiosyncratic variance (VIF ≈ 2.1).
 
 ### 4. Parameter stability and structural breaks
 
@@ -76,7 +72,7 @@ A minimum of 20 valid observations is required in each period; three stocks (DSF
 
 Chow tests at the 5% level are applied for each stock:
 
-- Structural‑break test: checks whether \(\alpha\) and \(\beta\) change between the two periods.  
+- Structural‑break test: checks whether $$\(\alpha\)$$ and $$\(\beta\)$$ change between the two periods.  
 - Forecast test: checks whether the model estimated in Period 1 predicts Period 2 returns well.
 
 - 8 stocks (≈8.2%) show a significant structural break in both tests; 89 stocks (≈91.8%) do not.  
