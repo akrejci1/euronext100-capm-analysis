@@ -21,9 +21,7 @@ The analysis is structured into three main parts: estimation of beta coefficient
 
 For each stock \(j\), the CAPM characteristic line is estimated using OLS on monthly excess returns:
 
-\[
-r_j - r_f = \alpha_j + \beta_j (r_m - r_f) + \varepsilon_j
-\]
+$$\[r_j - r_f = \alpha_j + \beta_j (r_m - r_f) + \varepsilon_j\]$$
 
 - At least 30 valid observations are required for each stock, which all 100 stocks satisfy.  
 - Estimated betas range from approximately 0.15 (defensive, e.g. TEL.OL – Telenor) to 2.06 (aggressive, e.g. A5G.IR – AIB Group).  
