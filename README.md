@@ -11,7 +11,7 @@ The analysis is structured into three main parts: estimation of beta coefficient
 
 - Monthly data from January 2019 to December 2025 are used, giving 83 monthly observations of logarithmic returns.  
 - The investment universe consists of 100 stocks from the Euronext 100 index (Amsterdam, Brussels, Dublin, Lisbon, Milan, Oslo, Paris).  
-- The market portfolio is proxied by the $$\(^\text{N100}\)$$ index.  
+- The market portfolio is proxied by the $$\(\text{N100}\)$$ index.  
 - The risk‑free rate is the ECB deposit facility rate (ECBDFR), converted to monthly frequency by dividing by 12.  
 - Missing observations due to IPOs, mergers, and restructurings are handled by aligning time series with the market index; pre‑listing periods are excluded from regressions as NA.
 
@@ -88,23 +88,21 @@ SMLs are also estimated separately for each period:
 
 An asymmetric CAPM specification is used to allow different betas in up and down markets:
 
-\[
-r_j - r_f = \alpha + \beta^{+} D (r_m - r_f) + \beta^{-} (1 - D)(r_m - r_f) + \varepsilon
-\]
+$$\[r_j - r_f = \alpha + \beta^{+} D (r_m - r_f) + \beta^{-} (1 - D)(r_m - r_f) + \varepsilon\]$$
 
 where \(D = 1\) if the market rises and \(D = 0\) if it falls.
 
 - The sample includes 50 months with rising markets (≈60.2%) and 33 months with falling markets (≈39.8%).  
-- An F‑test at 5% significance is used to test \(\beta^{+} = \beta^{-}\).  
+- An F‑test at 5% significance is used to test $$\(\beta^{+} = \beta^{-}\)$$.  
 - 16 stocks (16%) exhibit statistically significant asymmetry; the remaining 84% have symmetric betas.  
-- Most asymmetric stocks have \(\beta^{-} > \beta^{+}\), indicating higher sensitivity to downturns than to upturns (e.g. Airbus, Bank of Ireland, Engie), with Ferrari and LVMH as notable exceptions (\(\beta^{+} > \beta^{-}\)).
+- Most asymmetric stocks have $$\(\beta^{-} > \beta^{+}\)$$, indicating higher sensitivity to downturns than to upturns (e.g. Airbus, Bank of Ireland, Engie), with Ferrari and LVMH as notable exceptions $$(\(\beta^{+} > \beta^{-}\))$$.
 
 SMLs are then estimated separately for up and down markets using asymmetric betas and Newey–West standard errors:
 
-- In rising markets: intercept ≈ 0.0063 (p ≈ 0.079), slope ≈ 0.0309 (p < 0.001), market premium ≈ 0.0328, \(R^2 \approx 0.93\).  
-- In falling markets: intercept ≈ −0.0069 (p ≈ 0.041), slope ≈ −0.0206 (p < 0.001), market premium ≈ −0.0348, \(R^2 \approx 0.88\).  
+- In rising markets: intercept ≈ 0.0063 (p ≈ 0.079), slope ≈ 0.0309 (p < 0.001), market premium ≈ 0.0328, $$\(R^2 \approx 0.93\)$$.  
+- In falling markets: intercept ≈ −0.0069 (p ≈ 0.041), slope ≈ −0.0206 (p < 0.001), market premium ≈ −0.0348, $$\(R^2 \approx 0.88\)$$.  
 
-The asymmetric CAPM dramatically improves fit relative to the symmetric model (\(R^2 \approx 0.90\) vs. 0.43), indicating that allowing for different betas in up and down markets captures much more of the cross‑sectional variation in returns.
+The asymmetric CAPM dramatically improves fit relative to the symmetric model $$(\(R^2 \approx 0.90\) vs. 0.43)$$, indicating that allowing for different betas in up and down markets captures much more of the cross‑sectional variation in returns.
 
 ## Main findings
 
