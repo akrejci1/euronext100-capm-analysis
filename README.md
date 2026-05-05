@@ -1,62 +1,133 @@
-# Econometric Analysis of the CAPM on the Euronext 100 Index
+# CAPM Analysis for Euronext 100 (2019–2025)
 
-This project provides a comprehensive econometric evaluation of the Capital Asset Pricing Model (CAPM) using a sample of 100 stocks from the Euronext 100 index between 2019 and 2025. The analysis covers beta estimation, cross-sectional testing of the Security Market Line (SML), Fama-MacBeth regressions, and structural stability, concluding with an asymmetric evaluation of market conditions.
+This repository contains an empirical analysis of the Capital Asset Pricing Model (CAPM) on the Euronext 100 index over the period 2019–2025.
 
-## Project Structure
+## Overview
 
-The project is executed via a series of R scripts, designed to be run sequentially using the provided master script.
+The project evaluates whether CAPM provides a satisfactory description of the cross‑section of stock returns in the Euronext 100, with a focus on beta estimates, the Security Market Line (SML), and potential asymmetries in risk–return relationships.  
+The analysis is structured into three main parts: estimation of beta coefficients for individual stocks, testing the validity of CAPM using portfolio‑level regressions, and examining parameter stability and asymmetric betas over time.
 
-*   `00_master_script.R`: The main script that runs the entire analysis sequentially.
-*   `01_data_and_beta_estimation.R`: Handles data acquisition (Yahoo Finance, FRED), calculation of logarithmic returns, and Ordinary Least Squares (OLS) estimation of individual asset betas.
-*   `02_capm_validity_testing.R`: Forms 10 beta-sorted portfolios, estimates the cross-sectional Security Market Line (SML), and performs the Fama-MacBeth (1973) two-pass regression to test for non-linearity and non-systematic risk pricing.
-*   `03_structural_breaks_and_asymetry.R`: Investigates the temporal stability of beta using Chow tests and explores asymmetric beta behavior in up-markets versus down-markets.
-*   `04_model_diagnostics.R`: Performs diagnostic checks on the underlying models (Breusch-Pagan, Shapiro-Wilk, Durbin-Watson, and Ramsey RESET).
+## Data
 
-## Data Sources
+- Monthly data from January 2019 to December 2025 are used, giving 83 monthly observations of logarithmic returns.  
+- The investment universe consists of 100 stocks from the Euronext 100 index (Amsterdam, Brussels, Dublin, Lisbon, Milan, Oslo, Paris).  
+- The market portfolio is proxied by the ^N100 index.  
+- The risk‑free rate is the ECB deposit facility rate (ECBDFR), converted to monthly frequency by dividing by 12.  
+- Missing observations due to IPOs, mergers, and restructurings are handled by aligning time series with the market index; pre‑listing periods are excluded from regressions as NA.
 
-*   **Stock Prices and Market Index:** Monthly adjusted closing prices for 100 constituents of the Euronext 100 index and the index itself (`^N100`) sourced from Yahoo Finance.
-*   **Risk-Free Rate:** The ECB Deposit Facility Rate (ECBDFR), sourced from the FRED database and converted to a monthly frequency.
-*   **Time Horizon:** January 2019 to December 2025 (83 monthly observations).
+## Methods
 
-## Key Findings
+### 1. Individual stock CAPM regressions
 
-### 1. Beta Estimation and Jensen's Alpha
+For each stock \( j \), the CAPM characteristic line is estimated using OLS on monthly excess returns:
 
-Individual regressions of the characteristic lines revealed that 94% of the assets had an alpha ( $\alpha$ ) that was not statistically significantly different from zero, which is largely consistent with the CAPM's assumption that market returns explain asset returns.
+\[
+r_j - r_f = \alpha_j + \beta_j (r_m - r_f) + \varepsilon_j
+\]
 
-### 2. The Security Market Line (SML)
+- At least 30 valid observations are required for each stock, which all 100 stocks satisfy.  
+- Estimated betas range from approximately 0.15 (defensive, e.g. TEL.OL – Telenor) to 2.06 (aggressive, e.g. A5G.IR – AIB Group).  
+- 41 stocks are classified as defensive (\(\beta < 1\)) and 59 as aggressive (\(\beta \ge 1\)).
 
-The cross-sectional regression of 10 portfolios formed on beta yielded the following SML:
+Significance of abnormal returns is tested via:
 
-$$\overline{r_p} - r_f = \gamma_0 + \gamma_1 \beta_p + \epsilon_p$$
+- \(H_0: \alpha_j = 0\) vs. \(H_1: \alpha_j \neq 0\) at the 5% level.  
+- \(H_0\) is not rejected for 94 stocks (94%), while it is rejected for 6 stocks (all with positive alpha), a rate consistent with the expected number of false rejections at the 5% level.
 
-The intercept ( $\gamma_0$ ) was found to be positive and statistically significant ( $p = 0.035$ ), contradicting the strict CAPM assumption that $\gamma_0 = 0$. The slope ( $\gamma_1$ ) was not significantly different from the realized market premium. This result — defensive stocks earning more than predicted and aggressive stocks earning less — is consistent with broader empirical literature.
+### 2. Portfolio construction and SML
 
-### 3. Fama-MacBeth (1973) Regressions
+- The 100 stocks are sorted by estimated beta and grouped into 10 equally weighted portfolios (10 stocks each).  
+- Portfolio beta is the arithmetic mean of constituent betas; portfolio excess return is the average monthly risk premium over the full sample.  
 
-The Fama-MacBeth methodology was applied to test for the linearity of the beta-return relationship and the pricing of non-systematic risk:
+A cross‑sectional regression of portfolio average excess returns on portfolio betas is used to estimate the Security Market Line:
 
-$$R_{pt} = \delta_{1t} + \delta_{2t} \beta_p + \delta_{3t} \beta_p^2 + \delta_{4t} \sigma^2(\epsilon_p) + \eta_{pt}$$
+\[
+r_p - r_f = \gamma_0 + \gamma_1 \beta_p + \varepsilon_p
+\]
 
-*   **Linearity:** The hypothesis $\delta_3 = 0$ could not be rejected, confirming a linear relationship between beta and returns.
-*   **Non-Systematic Risk:** The hypothesis $\delta_4 = 0$ could not be rejected, confirming that the market does not reward idiosyncratic risk. Both findings support the CAPM framework.
+- Newey–West robust standard errors are applied due to the small sample of 10 portfolios.  
+- The intercept \(\gamma_0\) is positive and statistically significant (p ≈ 0.035), which is inconsistent with the CAPM restriction \(\gamma_0 = 0\).  
+- The slope \(\gamma_1\) is not significant at the 5% level (p ≈ 0.085), but is close to the observed market risk premium, so \(\gamma_1 = r_m - r_f\) cannot be rejected.  
+- The regression explains about 43% of the cross‑sectional variation in portfolio risk premia (R² ≈ 0.43).
 
-### 4. Structural Breaks and Asymmetric Beta
+These findings are in line with empirical literature: a positive, significant intercept and a slope lower than the market premium suggest that defensive stocks earn higher returns and aggressive stocks lower returns than predicted by CAPM.
 
-*   **Stability:** Chow tests on a split sample (2019–2023 vs. 2024–2025) revealed that only 8.2% of the stocks exhibited a significant structural break in their parameters, suggesting beta is generally a stable parameter over time.
-*   **Asymmetry:** An asymmetric CAPM specification differentiating between up-markets ( $D = 1$ ) and down-markets ( $D = 0$ ) was tested:
+### 3. Fama–MacBeth (1973) tests
 
-$$r_j - r_f = \alpha + \beta^{+} \cdot D \cdot (r_m - r_f) + \beta^{-} \cdot (1 - D) \cdot (r_m - r_f) + \epsilon$$
+The Fama–MacBeth procedure is implemented using cross‑sectional regressions across the 10 portfolios for each month \( t \):
 
-The asymmetric model showed substantially higher explanatory power ( $R^2 \approx 0.90$ ) compared to the symmetric model ( $R^2 = 0.43$ ). The slopes for both the up-market and down-market SMLs were highly significant, demonstrating that adjusting for market direction dramatically improves the model's fit.
+\[
+R_{pt} = \gamma_{0t} + \gamma_{1t} \beta_p + \gamma_{2t} \beta_p^2 + \gamma_{3t} \sigma^2(\varepsilon_p) + \eta_{pt}
+\]
 
-## Diagnostics and Robustness
+- Time‑series averages of the monthly coefficients are computed, with standard errors robust to serial correlation.  
+- Estimates are available for all 83 months.  
+- The null of linearity in beta (\(\delta_3 = 0\) for the \(\beta^2\) term) is not rejected (p ≈ 0.703), supporting a linear beta–return relation.  
+- The null that idiosyncratic risk is not priced (\(\delta_4 = 0\) for \(\sigma^2(\varepsilon)\)) is also not rejected (p ≈ 0.287).  
 
-The analysis incorporated Newey-West and White HC3 robust standard errors to correct for heteroskedasticity and autocorrelation, ensuring reliable inference across the cross-sectional and time-series regressions.
+Multicollinearity between \(\beta\) and \(\beta^2\) is high (VIF ≈ 22–26), but this is expected and does not materially affect the key coefficient on idiosyncratic variance (VIF ≈ 2.1).
 
-## How to Run
+### 4. Parameter stability and structural breaks
 
-1.  Clone this repository or download the `.R` scripts.
-2.  Set your working directory in R/RStudio to the folder containing the scripts.
-3.  Ensure the required packages are installed: `quantmod`, `tidyverse`, `ggplot2`, `gridExtra`, `strucchange`, `sandwich`, `lmtest`, `car`.
-4.  Run the `00_master_script.R` file to execute the analysis pipeline sequentially.
+To examine stability of CAPM parameters over time, the sample is split into two subperiods:
+
+- Period 1: February 2019 – December 2023 (59 months).  
+- Period 2: January 2024 – December 2025 (24 months).
+
+A minimum of 20 valid observations is required in each period; three stocks (DSFIR.AS, URW.PA, EXO.AS) are excluded due to insufficient data, leaving 97 stocks.
+
+Chow tests at the 5% level are applied for each stock:
+
+- Structural‑break test: checks whether \(\alpha\) and \(\beta\) change between the two periods.  
+- Forecast test: checks whether the model estimated in Period 1 predicts Period 2 returns well.
+
+- 8 stocks (≈8.2%) show a significant structural break in both tests; 89 stocks (≈91.8%) do not.  
+- Notable changes include LVMH (beta from ≈1.07 to ≈2.08) and Saint‑Gobain (beta from ≈1.63 to ≈0.36).  
+- The high share of stocks without breaks indicates that beta is generally a stable parameter over this horizon.
+
+SMLs are also estimated separately for each period:
+
+- Period 1: intercept highly significant, slope not significant.  
+- Period 2: intercept becomes insignificant (closer to CAPM prediction), while the slope is marginally significant, though the short sample (24 months, 10 portfolios) limits statistical power.
+
+### 5. Asymmetric beta and market regimes
+
+An asymmetric CAPM specification is used to allow different betas in up and down markets:
+
+\[
+r_j - r_f = \alpha + \beta^+ D (r_m - r_f) + \beta^- (1 - D)(r_m - r_f) + \varepsilon
+\]
+
+where \(D = 1\) if the market rises and \(D = 0\) if it falls.
+
+- The sample includes 50 months with rising markets (≈60.2%) and 33 months with falling markets (≈39.8%).  
+- An F‑test at 5% significance is used to test \( \beta^+ = \beta^- \).  
+- 16 stocks (16%) exhibit statistically significant asymmetry; the remaining 84% have symmetric betas.  
+- Most asymmetric stocks have \(\beta^- > \beta^+\), indicating higher sensitivity to downturns than to upturns (e.g. Airbus, Bank of Ireland, Engie), with Ferrari and LVMH as notable exceptions (\(\beta^+ > \beta^-\)).
+
+SMLs are then estimated separately for up and down markets using asymmetric betas and Newey–West standard errors:
+
+- In rising markets: intercept ≈ 0.0063 (p ≈ 0.079), slope ≈ 0.0309 (p < 0.001), market premium ≈ 0.0328, R² ≈ 0.93.  
+- In falling markets: intercept ≈ −0.0069 (p ≈ 0.041), slope ≈ −0.0206 (p < 0.001), market premium ≈ −0.0348, R² ≈ 0.88.  
+
+The asymmetric CAPM dramatically improves fit relative to the symmetric model (R² ≈ 0.90 vs. 0.43), indicating that allowing for different betas in up and down markets captures much more of the cross‑sectional variation in returns.
+
+## Main findings
+
+- The majority of stocks have betas consistent with CAPM, and only a small fraction shows statistically significant abnormal returns; overall, results are broadly consistent with CAPM at the individual‑stock level.  
+- The SML intercept is positive and significant, while the slope is close to but statistically indistinguishable from the market premium, suggesting deviations from the strict CAPM in the cross‑section of returns.  
+- Fama–MacBeth tests support linearity in beta and confirm that idiosyncratic risk is not priced, in line with CAPM.  
+- Betas are generally stable over time, with only about 8% of stocks exhibiting structural breaks between pre‑2024 and post‑2024 periods.  
+- Roughly 16% of stocks display asymmetric betas, typically being more sensitive to market downturns than upturns.  
+- The asymmetric CAPM specification provides a substantially better fit to the data than the symmetric version, suggesting that extensions of CAPM that account for asymmetry can better describe European equity returns in this sample.
+
+## How to use this repository
+
+- Clone the repository to reproduce the CAPM analysis for the Euronext 100 index.  
+- Inspect the scripts and notebooks to see data preparation, model estimation, and test implementation (e.g. individual CAPM regressions, portfolio formation, SML, Fama–MacBeth, Chow tests, and asymmetric CAPM).  
+- Adapt the code to different markets, time periods, or alternative risk factors if you want to extend the analysis beyond the basic and asymmetric CAPM.
+
+## References
+
+- Fama, E. F., & MacBeth, J. D. (1973). Risk, return, and equilibrium: Empirical tests.  
+- Rachev, S. T. et al. (2007). Empirical evidence on the performance of CAPM and related models.
