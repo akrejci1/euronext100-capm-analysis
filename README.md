@@ -1,7 +1,6 @@
 # CAPM Analysis — Euronext 100 (2019–2025)
 
-This repository contains an empirical analysis of the Capital Asset Pricing Model (CAPM) on the Euronext 100 index over the period January 2019 – December 2025, carried out as part of an Econometrics course assignment.
-
+This repository contains an empirical analysis of the Capital Asset Pricing Model (CAPM) on the Euronext 100 index over the period January 2019 – December 2025.
 ---
 
 ## Overview
