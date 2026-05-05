@@ -11,7 +11,7 @@ The analysis is structured into three main parts: estimation of beta coefficient
 
 - Monthly data from January 2019 to December 2025 are used, giving 83 monthly observations of logarithmic returns.  
 - The investment universe consists of 100 stocks from the Euronext 100 index (Amsterdam, Brussels, Dublin, Lisbon, Milan, Oslo, Paris).  
-- The market portfolio is proxied by the ^N100 index.  
+- The market portfolio is proxied by the \(^\text{N100}\) index.  
 - The risk‑free rate is the ECB deposit facility rate (ECBDFR), converted to monthly frequency by dividing by 12.  
 - Missing observations due to IPOs, mergers, and restructurings are handled by aligning time series with the market index; pre‑listing periods are excluded from regressions as NA.
 
@@ -19,7 +19,7 @@ The analysis is structured into three main parts: estimation of beta coefficient
 
 ### 1. Individual stock CAPM regressions
 
-For each stock \( j \), the CAPM characteristic line is estimated using OLS on monthly excess returns:
+For each stock \(j\), the CAPM characteristic line is estimated using OLS on monthly excess returns:
 
 \[
 r_j - r_f = \alpha_j + \beta_j (r_m - r_f) + \varepsilon_j
@@ -48,13 +48,13 @@ r_p - r_f = \gamma_0 + \gamma_1 \beta_p + \varepsilon_p
 - Newey–West robust standard errors are applied due to the small sample of 10 portfolios.  
 - The intercept \(\gamma_0\) is positive and statistically significant (p ≈ 0.035), which is inconsistent with the CAPM restriction \(\gamma_0 = 0\).  
 - The slope \(\gamma_1\) is not significant at the 5% level (p ≈ 0.085), but is close to the observed market risk premium, so \(\gamma_1 = r_m - r_f\) cannot be rejected.  
-- The regression explains about 43% of the cross‑sectional variation in portfolio risk premia (R² ≈ 0.43).
+- The regression explains about 43% of the cross‑sectional variation in portfolio risk premia (\(R^2 \approx 0.43\)).
 
 These findings are in line with empirical literature: a positive, significant intercept and a slope lower than the market premium suggest that defensive stocks earn higher returns and aggressive stocks lower returns than predicted by CAPM.
 
 ### 3. Fama–MacBeth (1973) tests
 
-The Fama–MacBeth procedure is implemented using cross‑sectional regressions across the 10 portfolios for each month \( t \):
+The Fama–MacBeth procedure is implemented using cross‑sectional regressions across the 10 portfolios for each month \(t\):
 
 \[
 R_{pt} = \gamma_{0t} + \gamma_{1t} \beta_p + \gamma_{2t} \beta_p^2 + \gamma_{3t} \sigma^2(\varepsilon_p) + \eta_{pt}
@@ -95,22 +95,22 @@ SMLs are also estimated separately for each period:
 An asymmetric CAPM specification is used to allow different betas in up and down markets:
 
 \[
-r_j - r_f = \alpha + \beta^+ D (r_m - r_f) + \beta^- (1 - D)(r_m - r_f) + \varepsilon
+r_j - r_f = \alpha + \beta^{+} D (r_m - r_f) + \beta^{-} (1 - D)(r_m - r_f) + \varepsilon
 \]
 
 where \(D = 1\) if the market rises and \(D = 0\) if it falls.
 
 - The sample includes 50 months with rising markets (≈60.2%) and 33 months with falling markets (≈39.8%).  
-- An F‑test at 5% significance is used to test \( \beta^+ = \beta^- \).  
+- An F‑test at 5% significance is used to test \(\beta^{+} = \beta^{-}\).  
 - 16 stocks (16%) exhibit statistically significant asymmetry; the remaining 84% have symmetric betas.  
-- Most asymmetric stocks have \(\beta^- > \beta^+\), indicating higher sensitivity to downturns than to upturns (e.g. Airbus, Bank of Ireland, Engie), with Ferrari and LVMH as notable exceptions (\(\beta^+ > \beta^-\)).
+- Most asymmetric stocks have \(\beta^{-} > \beta^{+}\), indicating higher sensitivity to downturns than to upturns (e.g. Airbus, Bank of Ireland, Engie), with Ferrari and LVMH as notable exceptions (\(\beta^{+} > \beta^{-}\)).
 
 SMLs are then estimated separately for up and down markets using asymmetric betas and Newey–West standard errors:
 
-- In rising markets: intercept ≈ 0.0063 (p ≈ 0.079), slope ≈ 0.0309 (p < 0.001), market premium ≈ 0.0328, R² ≈ 0.93.  
-- In falling markets: intercept ≈ −0.0069 (p ≈ 0.041), slope ≈ −0.0206 (p < 0.001), market premium ≈ −0.0348, R² ≈ 0.88.  
+- In rising markets: intercept ≈ 0.0063 (p ≈ 0.079), slope ≈ 0.0309 (p < 0.001), market premium ≈ 0.0328, \(R^2 \approx 0.93\).  
+- In falling markets: intercept ≈ −0.0069 (p ≈ 0.041), slope ≈ −0.0206 (p < 0.001), market premium ≈ −0.0348, \(R^2 \approx 0.88\).  
 
-The asymmetric CAPM dramatically improves fit relative to the symmetric model (R² ≈ 0.90 vs. 0.43), indicating that allowing for different betas in up and down markets captures much more of the cross‑sectional variation in returns.
+The asymmetric CAPM dramatically improves fit relative to the symmetric model (\(R^2 \approx 0.90\) vs. 0.43), indicating that allowing for different betas in up and down markets captures much more of the cross‑sectional variation in returns.
 
 ## Main findings
 
