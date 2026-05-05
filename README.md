@@ -34,12 +34,12 @@ Five tickers have incomplete data due to late listings or corporate events: `DSF
 ```
 .
 ├── 00_master_script.R                    # Runs all examples sequentially
-├── 01_data_and_beta_estimation.R         # Example 1: data, beta estimation, alpha test
-├── 02_capm_validity_testing.R            # Example 2: SML, Fama-MacBeth test
-├── 03_structural_breaks_and_asymmetry.R  # Example 3: Chow tests, asymmetric beta
-├── 04_model_diagnostics.R               # Diagnostics: BP, Shapiro-Wilk, DW, RESET, VIF
-├── capm_beta_results.csv                # Estimated beta coefficients for all 100 tickers
-└── Results/                             # Output plots (PNG)
+├── 01_data_and_beta_estimation.R         # Data, beta estimation, alpha test
+├── 02_capm_validity_testing.R            # SML, Fama-MacBeth test
+├── 03_structural_breaks_and_asymmetry.R  # Chow tests, asymmetric beta
+├── 04_model_diagnostics.R                # Diagnostics: BP, Shapiro-Wilk, DW, RESET, VIF
+├── capm_beta_results.csv                 # Estimated beta coefficients for all 100 tickers
+└── Results/                              # Output plots (PNG)
 ```
 
 ---
@@ -64,13 +64,13 @@ Individual examples can also be run standalone — simply ensure `capm_data.RDat
 
 ## Results
 
-### Example 1 — Beta Estimation and Alpha Test
+### 1 — Beta Estimation and Alpha Test
 
 - Beta coefficients range from **0.15** (TEL.OL — Telenor) to **2.06** (A5G.IR — AIB Group)
 - **41 defensive** stocks (β < 1), **59 aggressive** stocks (β ≥ 1)
 - H₀: α = 0 rejected at 5% for **6 out of 100 tickers** (6.0%): KOG.OL, UNI.MI, PST.MI, BAMI.MI, SU.PA, ASM.AS — all with positive alpha
 
-### Example 2 — CAPM Validity
+### 2 — CAPM Validity
 
 **Security Market Line (OLS with White robust SE):**
 
@@ -89,7 +89,7 @@ R² = 0.43 — beta explains 43% of cross-sectional variation in portfolio premi
 | δ₃ (β²) | −0.00146 | 0.703 | δ₃ = 0 ✓ — linearity confirmed |
 | δ₄ (σ²) | 0.81073 | 0.287 | δ₄ = 0 ✓ — unsystematic risk not priced |
 
-### Example 3 — Structural Breaks and Asymmetry
+### 3 — Structural Breaks and Asymmetry
 
 **Chow tests** (breakpoint: January 2024, 97 tickers analyzed):
 
@@ -129,9 +129,3 @@ The asymmetric CAPM dramatically outperforms the symmetric model (R² ≈ 0.90 v
 High VIF for β and β² (≈ 22–26) is expected in the FM specification and does not affect the key coefficient on unsystematic risk.
 
 ---
-
-## References
-
-- Fama, E. F. and MacBeth, J. D. (1973). Risk, Return, and Equilibrium: Empirical Tests. *Journal of Political Economy*, 81(3), 607–636.
-- Gibbons, M. R. (1982). Multivariate Tests of Financial Models. *Journal of Financial Economics*, 10(1), 3–27.
-- Rachev, S. T., Mittnik, S., Fabozzi, F. J., Focardi, S. M. and Jašić, T. (2007). *Financial Econometrics*. John Wiley & Sons.
