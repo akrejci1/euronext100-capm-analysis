@@ -63,7 +63,7 @@ dates_index  <- index(n100_monthly)
 n100_vec     <- as.numeric(n100_monthly)
 cat("  Successfully loaded:", length(n100_vec), "months\n")
 
-# Risk-Free Rate: ECB Deposit Facility Rate (FRED: ECBDFR)[cite: 5]
+# Risk-Free Rate: ECB Deposit Facility Rate (FRED: ECBDFR)
 cat("Downloading Risk-Free Rate (FRED: ECBDFR)...\n")
 rf_vec <- tryCatch({
   rf_raw    <- getSymbols("ECBDFR", src = "FRED", from = start_date, to = end_date, auto.assign = FALSE)
@@ -76,7 +76,7 @@ rf_vec <- tryCatch({
   rep(0, length(dates_index))
 })
 
-# Stock Prices from Yahoo Finance[cite: 5]
+# Stock Prices from Yahoo Finance
 cat("\nDownloading stock prices...\n")
 prices_list    <- list()
 failed_tickers <- character(0)
@@ -112,7 +112,7 @@ mkt_prem     <- rm_vec - rf_ret
 dates_ret    <- tail(dates_index, T - 1)
 returns_list <- lapply(prices_list, log_ret)
 
-# Data availability check[cite: 5]
+# Data availability check
 data_overview <- do.call(rbind, lapply(names(returns_list), function(tk) {
   r       <- returns_list[[tk]]
   valid_i <- which(!is.na(r))
@@ -194,7 +194,7 @@ capm_results <- capm_results %>%
   arrange(beta) %>%
   mutate(
     alpha_sig = ifelse(p_alpha < 0.05, "Reject H0 (α≠0)", "Fail to reject H0 (α=0)"),
-    beta_type = ifelse(beta >= 1, "Aggressive (β≥1)", "Defensive (β<1)")[cite: 5]
+    beta_type = ifelse(beta >= 1, "Aggressive (β≥1)", "Defensive (β<1)")
   )
 
 print(capm_results %>% arrange(p_alpha) %>% 
